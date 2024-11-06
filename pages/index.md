@@ -1,130 +1,137 @@
 ---
-title: Welcome to Evidence
+title: Archie Sarre Wood
+hide_title: true
 ---
 
-_Build polished data products with SQL and Markdown_
+<img src="https://avatars.githubusercontent.com/archiewood" alt="Archie" class="rounded-full w-24 h-24 mb-4">
 
-This demo [connects](/settings) to a local DuckDB file `needful_things.duckdb`.
+## Archie Sarre Wood
 
-<LineChart
-  data={orders_by_month}
-  y=sales
-  yFmt=usd0k
-  title = "Sales by Month, USD"
-/>
+<div style="display: flex; flex-direction: row; gap: 10px;">
+    <a href="https://www.linkedin.com/in/archiesarrewood/"><img src="https://img.shields.io/badge/-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+    <a href="https://x.com/archieemwood"><img src="https://img.shields.io/badge/-000000?style=for-the-badge&logo=x&logoColor=white" alt="Twitter"></a>
+    <a href="https://bsky.app/profile/archie.sarrewood.com"><img src="https://img.shields.io/badge/-00A0DC?style=for-the-badge&logo=bluesky&logoColor=white" alt="Bluesky"></a>
+    <a href="https://github.com/archiewood"><img src="https://img.shields.io/badge/-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a>
+</div>
 
-## Write in Markdown
+<LineBreak lines=1/>
 
-Evidence renders markdown files into web pages. This page is:
-`[project]/pages/index.md`.
+Building and growing developer tools. Working on [Evidence](https://evidence.dev), an open-source business intelligence tool.
 
-## Run SQL using Code Fences
+## Projects
 
-```sql orders_by_month
-select
-  date_trunc('month', order_datetime) as order_month,
-  count(*) as number_of_orders,
-  sum(sales) as sales,
-  sum(sales)/count(*) as average_order_value
-from needful_things.orders
-where order_datetime >= '2020-01-01'
-group by 1 order by 1 desc
+
+```sql projects
+select 
+    'DuckDB GSheets' as name,
+    'https://duckdb-gsheets.com/' as url,
+    'https://github.com/evidence-dev/duckdb_gsheets' as source_code,
+    'Connect Google Sheets to DuckDB' as description,
+    87 as stars
+union all select
+    'DuckDB SQLTools',
+    'https://github.com/evidence-dev/sqltools-duckdb-driver',
+    'https://github.com/evidence-dev/sqltools-duckdb-driver',
+    'SQLTools extension for DuckDB',
+    20 as stars
+union all select
+    'BigQuery SQLTools',
+    'https://github.com/evidence-dev/sqltools-bigquery-driver',
+    'https://github.com/evidence-dev/sqltools-bigquery-driver',
+    'SQLTools extension for BigQuery',
+    40 as stars
+union all select
+    'GoSQL',
+    'https://github.com/archiewood/gosql',
+    'https://github.com/archiewood/gosql',
+    'A simple SQL database implemented in Go',
+    150 as stars
+union all select
+    'Pure CSS Site',
+    'https://pure-css-site.netlify.app/',
+    'https://github.com/archiewood/pure-css-site/blob/master/index.css',
+    'A site built with only CSS',
+    16 as stars
+union all select
+    'Baby Tracker',
+    'https://baby-tracker.evidence.app/',
+    'https://github.com/archiewood/baby-tracker',
+    'A data viz app to track baby''s feed and sleep',
+    10 as stars
 ```
 
-In your markdown file, you can include SQL queries in code fences. Evidence will run these queries through your database and return the results to the page.
-
-<Alert status=info>  
-To see the queries on a page, click the 3-dot menu at the top right of the page and Show Queries. You can see both the SQL and the query results by interacting with the query above.
-</Alert>
-
-## Visualize Data with Components
-
-### Value in Text
-
-Last month customers placed **<Value data={orders_by_month} column=number_of_orders/>** orders. The AOV was **<Value data={orders_by_month} column=average_order_value fmt=usd2/>**.
-
-### Big Value 
-<BigValue data={orders_by_month} value=sales fmt=usd0/>
-<BigValue data={orders_by_month} value=number_of_orders />
-
-
-### Bar Chart
+<DataTable data={projects} link=url>
+  <Column id=name/>
+  <Column id=description/>
+  <Column id=stars/>
+  <Column id=source_code contentType=link linkLabel="GitHub &rarr;"/>
+</DataTable>
 
 <BarChart 
-  data={orders_by_month} 
-  x=order_month
-  y=number_of_orders 
-  fillColor="#488f96"
->
-  <ReferenceArea xMin="2020-03-15" xMax="2021-05-15" label="COVID Impacted" color=red/>
-</BarChart>
-
-> **Try:** Change the chart to a `<LineChart>`.
-
-### Data Table
-
-<DataTable data={orders_by_month} rows=6/>
-
-> **More:** See [all components](https://docs.evidence.dev/components/all-components)
-
-## Add Interactive Features
-
-The latest version of Evidence includes features that allow you to easily create interactive data visualizations.
-
-### Chart with Filter 
-
-```sql categories
-select
-    category
-from needful_things.orders
-group by category
-```
-
-<Dropdown data={categories} name=category value=category>
-    <DropdownOption value="%" valueLabel="All Categories"/>
-</Dropdown>
-
-<Dropdown name=year>
-    <DropdownOption value=% valueLabel="All Years"/>
-    <DropdownOption value=2019/>
-    <DropdownOption value=2020/>
-    <DropdownOption value=2021/>
-</Dropdown>
-
-```sql orders_by_category
-select 
-    date_trunc('month', order_datetime) as month,
-    sum(sales) as sales_usd,
-    category
-from needful_things.orders
-where category like '${inputs.category.value}'
-and date_part('year', order_datetime) like '${inputs.year.value}'
-group by all
-order by sales_usd desc
-```
-
-<BarChart
-    data={orders_by_category}
-    title="Sales by Month, {inputs.category.label}"
-    x=month
-    y=sales_usd
-    series=category
+  data={projects} 
+  title="GitHub Stars by Project"
+  x=name 
+  y=stars 
+  swapXY
+  yAxisLabels=false
+  yGridlines=false
+  labels=true
 />
 
-# Share with Evidence Cloud
 
-Evidence Cloud is the easiest way to securely share your project. 
 
-- Get your project online
-- Authenticate users
-- Schedule data refreshes
+## Experience
 
-<BigLink href='https://du3tapwtcbi.typeform.com/waitlist?utm_source=template&typeform-source=template'>Deploy to Evidence Cloud &rarr;</BigLink>
+### Community and Growth @ Evidence
+*Apr 2022 - Present | Toronto / London*
 
-You can use Netlify, Vercel or another static hosting provider to [self-host Evidence](https://docs.evidence.dev/deployment/overview).
+Leading community engagement and growth initiatives for Evidence, an open-source business intelligence platform that enables code-driven analytics. Responsibilities span:
+- Technical documentation and developer experience
+- Community management (GitHub Issues & PRs)
+- Content creation (Blog, Social Media)
+- Developer relations and conference speaking
+- Product strategy and development
 
-# Get Support
+### BI Team Manager & Chief of Staff @ Patch Plants
+*Jan 2021 - Sep 2021 | London, UK*
 
-- Message us on [Slack](https://slack.evidence.dev/)
-- Read the [Docs](https://docs.evidence.dev/)
-- Open an issue on [Github](https://github.com/evidence-dev/evidence)
+Led data strategy and operations for fast-growing e-commerce startup (194% growth in 2020):
+- Managed BI stack (Fivetran, Snowflake, dbt, Looker) and data team
+- Executive team member driving strategic planning and OKRs
+- Led special projects including geographic expansion and Brexit planning
+- Board observer
+
+### Strategy Manager @ Patch Plants
+*Aug 2019 - Dec 2020 | London, UK*
+
+- Led £2.4m equity crowdfunding round with 3,000+ investors
+- Drove initiatives improving order contribution by 34%
+- Managed UK-wide expansion project
+
+### Consultant @ OC&C Strategy Consultants
+*2016 - 2019 | London, UK*
+
+Led strategy projects across retail, consumer goods, and B2B services:
+- Customer segmentation and market sizing
+- Operational transformation
+- Commercial due diligence
+- Team leadership of 2-5 consultants
+
+
+
+## Education
+
+**University of Cambridge**
+- MSci Physics (First Class Honours) | 2014 - 2015
+- BA Natural Sciences - Physics (First Class Honours) | 2011 - 2014
+
+## Awards & Achievements
+
+- Cambridge University Lightweight Rowing Blue (2015)
+- British Physics Olympiad Gold Award
+
+## Volunteer Work
+
+**Physics Tutor | The Access Project**  
+*2020 - 2022*  
+Tutoring Physics to students from disadvantaged backgrounds
