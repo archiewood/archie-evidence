@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: 'gh-pages' # or whichever branch you want to deploy from
+  schedule:
+    - cron: '*/10 * * * *' # This is every 10 minutes
 
 jobs:
   build:
