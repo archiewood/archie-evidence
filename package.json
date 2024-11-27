@@ -2,7 +2,7 @@
   "name": "my-evidence-project",
   "version": "0.0.1",
   "scripts": {
-    "build": "EVIDENCE_BUILD_DIR=./public evidence build",
+    "build": "evidence build",
     "build:strict": "evidence build:strict",
     "dev": "evidence dev --open /",
     "test": "evidence build",
